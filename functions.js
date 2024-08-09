@@ -1,4 +1,4 @@
-const getOutfitRecommendation = (
+export const getOutfitRecommendation = (
   forecastData,
   wardrobe,
   exitTime,
@@ -6,12 +6,16 @@ const getOutfitRecommendation = (
 ) => {
   const now = new Date(exitTime);
   const endTime = new Date(returnTime);
+  console.log(now);
+  console.log(endTime);
 
   // Filter forecasts for the time frame spent outside
   const relevantForecasts = forecastData.properties.periods.filter((period) => {
     const forecastTime = new Date(period.startTime);
+    console.log(forecastTime);
     return forecastTime >= now && forecastTime <= endTime;
   });
+  console.log(relevantForecasts);
 
   // Initialize variables to track extreme weather conditions
   let maxTemp = -Infinity;
@@ -44,12 +48,22 @@ const getOutfitRecommendation = (
 
   // Select appropriate clothing items
   const recommendedOutfit = wardrobe.filter((item) => {
-    if (item.type === "jacket" && (minTemp < 50 || maxWindSpeed > 20))
+    if (item.type === "jacket" && (minTemp < 50 || maxWindSpeed > 20)) {
+      console.log(`Added a ${item.type}`);
       return item;
-    if (item.type === "t-shirt" && maxTemp > 70) return item;
-    if (item.type === "raincoat" && maxPrecipitationProbability > 50)
+    }
+    if (item.type === "t-shirt" && maxTemp > 70) {
+      console.log(`Added a ${item.type}`);
       return item;
-    if (item.type === "breathable" && maxHumidity > 80) return item;
+    }
+    if (item.type === "raincoat" && maxPrecipitationProbability > 50) {
+      console.log(`Added a ${item.type}`);
+      return item;
+    }
+    if (item.type === "breathable" && maxHumidity > 80) {
+      console.log(`Added a ${item.type}`);
+      return item;
+    }
     return null;
   });
 

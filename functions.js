@@ -48,7 +48,7 @@ const getOutfitRecommendation = (
       return item;
     if (item.type === "t-shirt" && maxTemp > 70) return item;
     if (item.type === "raincoat" && maxPrecipitationProbability > 50)
-      return item; // Adjust threshold as needed
+      return item;
     if (item.type === "breathable" && maxHumidity > 80) return item;
     return null;
   });

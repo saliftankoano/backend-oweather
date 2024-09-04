@@ -1,8 +1,25 @@
 import { getOutfitRecommendation } from "./functions.js";
 import express from "express";
 import axios from "axios";
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
 const app = express();
 const port = 8080;
+
+
+const uri = "mongodb+srv://admin:<db_password>@kazedra-users.pai6b.mongodb.net/?retryWrites=true&w=majority&appName=Kazedra-Users";
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+const mongoose = require('mongoose')
+const server = "mongodb://localhost"
+mongoose.connect(server)
 
 app.use(express.json());
 

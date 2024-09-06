@@ -1,27 +1,29 @@
 import { getOutfitRecommendation } from "./functions.js";
-import express from "express";
 import axios from "axios";
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const express = require("express")
+const cors = require('cors')
+require('dotenv').config()
+
+const usersRoute = require("./routes/users.js")
 
 const app = express();
 const port = 8080;
 
-
-const uri = "mongodb+srv://admin:<db_password>@kazedra-users.pai6b.mongodb.net/?retryWrites=true&w=majority&appName=Kazedra-Users";
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
 const mongoose = require('mongoose')
-const server = "mongodb://localhost"
-mongoose.connect(server)
+mongoose.connect(process.env.MONGOURI)
 
 app.use(express.json());
+app.use(
+  cors({
+    origin:[
+      "http://kazedra.com/",
+      // "http://kazedra.com/*"
+    ]
+  }
+  )
+)
+
+app.use(usersRoute,"/users")
 
 // Testing data
 const wardrobe = [
@@ -30,6 +32,7 @@ const wardrobe = [
   { id: 3, type: "raincoat", material: "polyester", warmth: "medium" },
   { id: 4, type: "breathable", material: "nylon", warmth: "low" },
 ];
+
 // Get user's local weather office ID
 const getOffice = async (latitude, longitude) => {
   const url = `https://api.weather.gov/points/${latitude}%2C${longitude}`;
@@ -81,6 +84,7 @@ app.get(`/outfit/:latitude/:longitude`, async (req, res) => {
     res.status(400).send("No outfit suggestion found");
   }
 });
+
 app.get("/wardrobe/", async (req, res) => {
   console.log(`Send back the entire wardrobe`);
 });
@@ -88,3 +92,7 @@ app.get("/wardrobe/", async (req, res) => {
 app.listen(port, async () => {
   console.log(`Listening from port: ${port}`);
 });
+
+app.post("/user",(req,res)=>{
+  
+})

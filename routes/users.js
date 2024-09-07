@@ -1,6 +1,8 @@
-const express = require("express")
-const User = require("../schemas/User")
+import express from "express"
+// import User from "../schemas/User"
+import User from "../schemas/User.js"
 const router = express.Router()
+
 
 router.get("/",(req,res)=>{
 
@@ -13,7 +15,6 @@ router.post("/addUser", async (req,res)=>{
     //should include the user_id, customer_id and wardrobe (empty array of objects)
     try{
         const user = await User.create(userObj)
-        user.save()
         res.status(200)
     }
     catch{
@@ -21,13 +22,25 @@ router.post("/addUser", async (req,res)=>{
     }
 })
 
-router.post("/removeUser",(req,res)=>{
-
+router.post("/removeUser", async (req,res)=>{
+    // const user = await User.findOne()
 })
 
 //add a new article of clothing to user profile
 //check if the user is a 
-router.post("/", (req,res)=>{
-    const data = req.body
-    
+router.post("/addArticle", (req,res)=>{
+    const user_id = req.body.user_id
+    const article = req.body.article
 })
+
+router.post("/getWardrobe", (req,res)=>{
+
+})
+
+router.post("/removeArticle", (req,res)=>{
+
+})
+
+router.post("")
+
+export default router

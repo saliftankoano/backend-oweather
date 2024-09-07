@@ -1,37 +1,32 @@
 import { getOutfitRecommendation } from "./functions.js";
 import axios from "axios";
-const express = require("express")
-const cors = require('cors')
-require('dotenv').config()
+import express from 'express'
+import cors from "cors"
+import dotenv from "dotenv"
+dotenv.config()
 
-const usersRoute = require("./routes/users.js")
+import usersRoute from "./routes/users.js"
+import mongoose from "mongoose";
 
 const app = express();
 const port = 8080;
 
-const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGOURI)
 
 app.use(express.json());
 app.use(
   cors({
     origin:[
-      "http://kazedra.com/",
+      "*",
+      // "http://kazedra.com/",
       // "http://kazedra.com/*"
     ]
   }
   )
 )
 
-app.use(usersRoute,"/users")
+app.use("/users",usersRoute)
 
-// Testing data
-const wardrobe = [
-  { id: 1, type: "jacket", material: "wool", warmth: "high" },
-  { id: 2, type: "t-shirt", material: "cotton", warmth: "low" },
-  { id: 3, type: "raincoat", material: "polyester", warmth: "medium" },
-  { id: 4, type: "breathable", material: "nylon", warmth: "low" },
-];
 
 // Get user's local weather office ID
 const getOffice = async (latitude, longitude) => {
@@ -56,43 +51,36 @@ const fetchHourlyForecast = async (latitude, longitude) => {
   return response.data;
 };
 
-app.get(`/weather/:latitude/:longitude`, async (req, res) => {
-  const { latitude, longitude } = req.params;
-  const weather = await fetchHourlyForecast(latitude, longitude);
-  if (weather) {
-    res.status(200).send(weather);
-  } else {
-    res.status(400);
-  }
-});
+// app.get(`/weather/:latitude/:longitude`, async (req, res) => {
+//   const { latitude, longitude } = req.params;
+//   const weather = await fetchHourlyForecast(latitude, longitude);
+//   if (weather) {
+//     res.status(200).send(weather);
+//   } else {
+//     res.status(400);
+//   }
+// });
 
-app.get(`/outfit/:latitude/:longitude`, async (req, res) => {
-  const { latitude, longitude } = req.params;
-  const weather = await fetchHourlyForecast(latitude, longitude);
-  const exitTime = "2024-08-09T15:00:00-04:00"; // ISO string format
-  const returnTime = "2024-08-09T18:00:00-04:00";
-  const outfit = getOutfitRecommendation(
-    weather,
-    wardrobe,
-    exitTime,
-    returnTime
-  );
-  // console.log(outfit);
-  if (outfit) {
-    res.status(200).send(outfit);
-  } else {
-    res.status(400).send("No outfit suggestion found");
-  }
-});
+// app.get(`/outfit/:latitude/:longitude`, async (req, res) => {
+//   const { latitude, longitude } = req.params;
+//   const weather = await fetchHourlyForecast(latitude, longitude);
+//   const exitTime = "2024-08-09T15:00:00-04:00"; // ISO string format
+//   const returnTime = "2024-08-09T18:00:00-04:00";
+//   const outfit = getOutfitRecommendation(
+//     weather,
+//     wardrobe,
+//     exitTime,
+//     returnTime
+//   );
+//   // console.log(outfit);
+//   if (outfit) {
+//     res.status(200).send(outfit);
+//   } else {
+//     res.status(400).send("No outfit suggestion found");
+//   }
+// });
 
-app.get("/wardrobe/", async (req, res) => {
-  console.log(`Send back the entire wardrobe`);
-});
 
 app.listen(port, async () => {
   console.log(`Listening from port: ${port}`);
 });
-
-app.post("/user",(req,res)=>{
-  
-})

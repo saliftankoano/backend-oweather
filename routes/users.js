@@ -1,6 +1,7 @@
 import express from "express"
 // import User from "../schemas/User"
 import User from "../schemas/User.js"
+import Clothing, { clothingSchema } from "../schemas/Clothing.js"
 const router = express.Router()
 
 
@@ -26,15 +27,22 @@ router.post("/removeUser", async (req,res)=>{
     // const user = await User.findOne()
 })
 
+//TODO: test these routes, make sure they work properly. for example the process of creatin a new User and Clothing object may not work as expected
+
 //add a new article of clothing to user profile
 //check if the user is a 
-router.post("/addArticle", (req,res)=>{
+router.post("/addArticle", async (req,res)=>{
     const user_id = req.body.user_id
     const article = req.body.article
+    const userDoc = await User.findOne({user_id:user_id})
+    const articleDoc = Clothing.create(article)
+    userDoc.wardrobe.append(articleDoc)
 })
 
-router.post("/getWardrobe", (req,res)=>{
-
+router.post("/getWardrobe", async (req,res)=>{
+    const user_id = req.body.user_id
+    const userDoc = await User.findOne({user_id:user_id})
+    return userDoc.wardrobe
 })
 
 router.post("/removeArticle", (req,res)=>{

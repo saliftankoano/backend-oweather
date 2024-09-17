@@ -1,23 +1,14 @@
 import mongoose from "mongoose"
-// clothes may use their own schema, but this may be a storage concern on mongo
-// if clothes are made into their own schema, then wardrobe should include an array of cloth models
-// this would make the creation of outfits easier. outfits may need to be their own schema
+import { clothingSchema } from "./Clothing"
+import { outfitSchema } from "./Outfit"
+// the clothing schema is necessary, but may bring storage concerns in the future
 
 const userSchema = mongoose.Schema({
     user_id: String,
     customer_id: String,
 
-    // wardrobe: [{
-    //     id: String,
-    //     type: String,
-    //     warmth: String,
-    //     color: Number,
-    // }],
-
-    // outfits: [{
-
-    // }]
-    
+    wardrobe: [clothingSchema],
+    outfits: [outfitSchema]
 })
 
 export default mongoose.model('User', userSchema)

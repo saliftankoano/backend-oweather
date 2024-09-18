@@ -32,20 +32,45 @@ router.post("/removeUser", async (req,res)=>{
 //add a new article of clothing to user profile
 //check if the user is a 
 router.post("/addArticle", async (req,res)=>{
-    const user_id = req.body.user_id
-    const article = req.body.article
-    const userDoc = await User.findOne({user_id:user_id})
-    const articleDoc = Clothing.create(article)
-    userDoc.wardrobe.append(articleDoc)
+    try {
+        const user_id = req.body.user_id
+        const article = req.body.article
+        const userDoc = await User.findOne({user_id:user_id})
+        const articleDoc = await Clothing.create(article)
+        userDoc.wardrobe.append(articleDoc)
+    
+        res.send("success")
+    } catch (error) {
+        res.send(error)
+        res.status(500)
+    }
 })
 
 router.post("/getWardrobe", async (req,res)=>{
-    const user_id = req.body.user_id
-    const userDoc = await User.findOne({user_id:user_id})
-    return userDoc.wardrobe
+    try {
+        const user_id = req.body.user_id
+        const userDoc = await User.findOne({user_id:user_id})
+        res.send({wardrobe:userDoc.wardrobe})
+        res.status(200)
+    } catch (error) {
+        res.send(error)
+        res.status(500)
+    }
 })
 
-router.post("/removeArticle", (req,res)=>{
+router.post("/removeArticle", async (req,res)=>{
+    const user_id = req.body.user_id
+    const article = req.body.article //(assumed to already be an article document)
+    const userDoc = await User.findOne({user_id:user_id})
+    let i = userDoc.clothes.findIndex(article)
+    if (i > 0){
+        userDoc.clothes.splice(i)
+        res.send("success")
+        res.status(200)
+    } else {
+        res.send("error, article was not found in wardrobe")
+        res.status(500)
+    }
 
 })
 

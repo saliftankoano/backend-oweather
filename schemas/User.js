@@ -11,4 +11,4 @@ const userSchema = mongoose.Schema({
     outfits: [outfitSchema]
 })
 
-export default mongoose.model('User', userSchema)
+export default User = mongoose.model('User', userSchema)

@@ -69,3 +69,17 @@ export const getOutfitRecommendation = (
 
   return recommendedOutfit;
 };
+
+//TODO: method should return a list of possibilities for an outfit based on the colors given
+const pickByColor = (wardrobeDoc)=>{
+  // get colors of wardrobe pieces
+  const colors = wardrobeDoc.map((article)=>{
+    return article.color
+  })
+
+  // create a color pallete
+  // analogous, monochrome, completementary 
+
+  // use the color pallete with which clothes are available
+
+}

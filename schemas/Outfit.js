@@ -7,5 +7,5 @@ export const outfitSchema = mongoose.Schema({
     bottom:clothingSchema
 })
 
-export default mongoose.model('Outfit', outfitSchema)
+export default Outfit = mongoose.model('Outfit', outfitSchema)
 
